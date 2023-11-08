@@ -22,5 +22,5 @@ interface gastosApi{
     @DELETE("/api/gastos/{id}")
     suspend fun deleteGastos(@Path("id") id: Int): Response<Unit>
     @PUT("/api/gastos/{id}")
-    suspend fun putGastos(@Path("id") id: Int): Response<Unit>
+    suspend fun putGastos(@Path("id") id: Int, @Body gastos: gastosDto): Response<Unit>
 }
