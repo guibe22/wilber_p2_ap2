@@ -20,7 +20,7 @@ data class gastosDto (
     @Json(name="concepto")
     val concepto: String,
     @Json(name="ncf")
-    val nfc: Int,
+    val ncf: Int,
     @Json(name="itbis")
     val itbis: Int,
     @Json(name="monto")

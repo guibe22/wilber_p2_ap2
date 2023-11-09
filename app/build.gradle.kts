@@ -57,6 +57,7 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition-common:19.0.0")
 
     val lifeCycleVersion = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleVersion")
