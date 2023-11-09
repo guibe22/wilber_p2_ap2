@@ -15,6 +15,8 @@ data class gastosDto (
     val fecha: String,
     @Json(name = "idSuplidor")
     val idSuplidor : Int? = null,
+    @Json(name = "suplidor")
+    val suplidor : String?,
     @Json(name="concepto")
     val concepto: String,
     @Json(name="ncf")

@@ -4,6 +4,6 @@ import com.example.wilber_p2_ap2.data.remote.dto.gastosDto
 
 data class gastosListState(
     val isLoading: Boolean = false,
-    val Documentos: List<gastosDto> = emptyList(),
+    val Gastos: List<gastosDto> = emptyList(),
     val error: String = ""
 )
