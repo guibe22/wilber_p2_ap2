@@ -71,7 +71,7 @@ fun Gastoscard(
                 modifier = Modifier.weight(1f)
             ){
                 Text(
-                    text = "NcF:",
+                    text = "NCF:",
                     style = MaterialTheme.typography.bodySmall,
                 )
                 Text(
@@ -86,6 +86,29 @@ fun Gastoscard(
                     text = gastos.ncf.toString(),
                     style = MaterialTheme.typography.bodySmall,
                 )
+                Text(
+                    text = gastos.itbis.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            Row(
+                modifier = Modifier.weight(1f)
+            ){
+                Text(
+                    text = gastos.monto.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )  {
+            Row(
+
+            ) {
+
             }
         }
 

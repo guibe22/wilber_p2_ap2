@@ -29,6 +29,7 @@ class gastosViewModel @Inject constructor(
     var nfc by mutableStateOf("")
     var itbis by mutableStateOf("")
     var monto by mutableStateOf("")
+    var id by mutableStateOf(0)
 
     var fechaError by mutableStateOf(false)
     var idSuplidorError by mutableStateOf(false)
@@ -87,7 +88,7 @@ class gastosViewModel @Inject constructor(
         Cargar()
     }
 
-    fun saveGastos(id:Int) {
+    fun saveGastos() {
             viewModelScope.launch {
 
                 if (!validar()) {
@@ -97,7 +98,7 @@ class gastosViewModel @Inject constructor(
                         idSuplidor= idSuplidor.toIntOrNull() ?:0,
                         suplidor=null,
                         concepto=concepto,
-                        nfc = nfc.toIntOrNull() ?:0,
+                        ncf = nfc.toIntOrNull() ?:0,
                         itbis = itbis.toIntOrNull() ?:0,
                         monto = monto.toIntOrNull()?:0
                     )
@@ -106,6 +107,7 @@ class gastosViewModel @Inject constructor(
 
                     mensaje="guardado correctamente"
                     limpiar()
+                    id=0
                 } else {
                     mensaje="error"
                 }
@@ -128,13 +130,23 @@ class gastosViewModel @Inject constructor(
         return fechaError || idSuplidorError || conceptoError || nfcError ||  itbisError || montoError
     }
     fun limpiar(){
-        var fecha =""
-        var idSuplidor =""
-        var suplidor=""
-        var concepto =""
-        var nfc =""
-        var itbis =""
-        var monto =""
+         fecha =""
+         idSuplidor =""
+         suplidor=""
+         concepto =""
+         nfc =""
+         itbis =""
+         monto =""
+    }
+    fun Modificar( gastos:gastosDto){
+        id= gastos.idGasto!!
+        fecha = gastos.fecha
+        idSuplidor =gastos.idSuplidor.toString()
+        suplidor=gastos.suplidor.toString()
+        concepto =gastos.concepto
+        nfc =gastos.ncf.toString()
+        itbis= gastos.itbis.toString()
+        monto =gastos.monto.toString()
     }
 
 }
