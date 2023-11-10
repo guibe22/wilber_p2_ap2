@@ -1,5 +1,6 @@
 package com.example.wilber_p2_ap2.ui.gastos
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +13,10 @@ import com.example.wilber_p2_ap2.util.Resource
 import com.example.wilber_p2_ap2.util.gastosListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,7 +30,7 @@ class gastosViewModel @Inject constructor(
     var idSuplidor  by mutableStateOf("")
     var suplidor by mutableStateOf("")
     var concepto by mutableStateOf("")
-    var nfc by mutableStateOf("")
+    var ncf by mutableStateOf("")
     var itbis by mutableStateOf("")
     var monto by mutableStateOf("")
     var id by mutableStateOf(0)
@@ -34,7 +38,7 @@ class gastosViewModel @Inject constructor(
     var fechaError by mutableStateOf(false)
     var idSuplidorError by mutableStateOf(false)
     var conceptoError by mutableStateOf(false)
-    var nfcError by mutableStateOf(false)
+    var ncfError by mutableStateOf(false)
     var itbisError by mutableStateOf(false)
     var montoError by mutableStateOf(false)
 
@@ -42,8 +46,9 @@ class gastosViewModel @Inject constructor(
     val isMessageShownFlow = _isMessageShown.asSharedFlow()
     var mensaje by mutableStateOf("")
 
-     private var _state = mutableStateOf(gastosListState())
-    val state: State<gastosListState> = _state
+    private var _state =  MutableStateFlow(gastosListState())
+    val state: StateFlow<gastosListState> = _state.asStateFlow()
+
 
     fun onFechaChange(valor:String){
         fecha=valor
@@ -57,9 +62,9 @@ class gastosViewModel @Inject constructor(
         concepto= valor
         conceptoError= valor.isNullOrBlank()
     }
-    fun onNfcChange(valor:String){
-        nfc = valor
-        nfcError= valor.isNullOrBlank()
+    fun onNcfChange(valor:String){
+        ncf = valor
+        ncfError= valor.isNullOrBlank()
     }
     fun onItbisChange(valor:String){
         itbis= valor
@@ -96,9 +101,9 @@ class gastosViewModel @Inject constructor(
                         idGasto = id,
                         fecha=fecha,
                         idSuplidor= idSuplidor.toIntOrNull() ?:0,
-                        suplidor=null,
+                        suplidor="",
                         concepto=concepto,
-                        ncf = nfc.toIntOrNull() ?:0,
+                        ncf = ncf,
                         itbis = itbis.toIntOrNull() ?:0,
                         monto = monto.toIntOrNull()?:0
                     )
@@ -107,46 +112,53 @@ class gastosViewModel @Inject constructor(
 
                     mensaje="guardado correctamente"
                     limpiar()
-                    id=0
+                    Cargar()
+
                 } else {
                     mensaje="error"
                 }
             }
+
         }
 
     fun deleteGastos(id: Int){
         viewModelScope.launch {
             repository.deleteGastos(id)
+
         }
+        Cargar()
     }
 
     fun validar(): Boolean {
         onFechaChange(fecha)
         onIdSuplidorChange(idSuplidor)
         onConceptoChange(concepto)
-        onNfcChange(nfc)
+        onNcfChange(ncf)
         onItbisChange(itbis)
         onMontoChange(monto)
-        return fechaError || idSuplidorError || conceptoError || nfcError ||  itbisError || montoError
+        return fechaError || idSuplidorError || conceptoError || ncfError ||  itbisError || montoError
     }
     fun limpiar(){
          fecha =""
          idSuplidor =""
          suplidor=""
          concepto =""
-         nfc =""
+         ncf =""
          itbis =""
          monto =""
+        id=0
     }
     fun Modificar( gastos:gastosDto){
         id= gastos.idGasto!!
-        fecha = gastos.fecha
+        fecha = gastos.fecha.toString()
         idSuplidor =gastos.idSuplidor.toString()
         suplidor=gastos.suplidor.toString()
         concepto =gastos.concepto
-        nfc =gastos.ncf.toString()
+        ncf =gastos.ncf.toString()
         itbis= gastos.itbis.toString()
         monto =gastos.monto.toString()
+
+
     }
 
 }

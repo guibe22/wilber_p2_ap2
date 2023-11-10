@@ -2,6 +2,7 @@ package com.example.wilber_p2_ap2.di
 
 import com.example.wilber_p2_ap2.data.gastosApi
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +14,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn( SingletonComponent::class)
 object AppModule {
-
+    @Singleton
+    @Provides
+    fun providesMoshi(): Moshi {
+        return Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    }
     @Provides
         @Singleton
         fun provideDocumentosApi(moshi: Moshi, ): gastosApi {

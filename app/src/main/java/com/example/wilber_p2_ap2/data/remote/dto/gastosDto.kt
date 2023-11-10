@@ -10,9 +10,9 @@ import com.squareup.moshi.JsonClass
 data class gastosDto (
     @PrimaryKey
     @Json(name = "idGasto")
-    val idGasto : Int? = null,
+    val idGasto : Int?,
     @Json(name = "fecha")
-    val fecha: String,
+    val fecha: String?,
     @Json(name = "idSuplidor")
     val idSuplidor : Int? = null,
     @Json(name = "suplidor")
@@ -20,9 +20,9 @@ data class gastosDto (
     @Json(name="concepto")
     val concepto: String,
     @Json(name="ncf")
-    val ncf: Int,
+    val ncf: String?,
     @Json(name="itbis")
-    val itbis: Int,
+    val itbis: Int?,
     @Json(name="monto")
-    val monto: Int,
+    val monto: Int?,
     )
