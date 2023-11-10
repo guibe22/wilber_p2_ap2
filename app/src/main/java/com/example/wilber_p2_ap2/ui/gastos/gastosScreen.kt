@@ -28,6 +28,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -373,7 +374,7 @@ fun Gastoscard(
                 ) {
                     Text(
                         text = "$ " + gastos.monto.toString(),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         maxLines = 1,
                         textAlign = TextAlign.Right,
 
@@ -384,7 +385,7 @@ fun Gastoscard(
 
 
         }
-
+        Divider( thickness = 1.dp, color = Color.Black)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
