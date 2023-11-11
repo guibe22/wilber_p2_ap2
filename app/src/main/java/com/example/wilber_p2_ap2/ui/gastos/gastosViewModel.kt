@@ -157,6 +157,7 @@ class gastosViewModel @Inject constructor(
         ncf =gastos.ncf.toString()
         itbis= gastos.itbis.toString()
         monto =gastos.monto.toString()
+        Cargar()
 
 
     }

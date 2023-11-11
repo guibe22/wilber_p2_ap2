@@ -43,12 +43,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -62,18 +65,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.wilber_p2_ap2.data.remote.dto.gastosDto
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.wilber_p2_ap2.util.Resource
-import com.example.wilber_p2_ap2.util.gastosListState
-import com.google.android.gms.common.api.Scope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +124,7 @@ fun gastosScreen(
                            }
                        }
 
-                       uiState.Gastos!= null -> {
+                       uiState.Gastos.isNotEmpty() -> {
                            items(uiState.Gastos){gasto->
                                Gastoscard(gasto,viewModel)
                            }
@@ -143,10 +138,12 @@ fun gastosScreen(
                    }
 
 
+
                }
 
         }
     }
+
 }
 
 
