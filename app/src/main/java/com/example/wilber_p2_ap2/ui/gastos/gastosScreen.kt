@@ -1,5 +1,7 @@
 package com.example.wilber_p2_ap2.ui.gastos
 
+import android.app.DatePickerDialog
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -20,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BorderColor
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Warning
@@ -31,6 +34,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -41,6 +45,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -68,6 +74,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -160,18 +169,8 @@ fun RegistroGasto(
     ) {
 
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = ViewModel.fecha,
-                label = { Text(text = "Fecha") },
-                singleLine = true,
-                onValueChange = ViewModel::onFechaChange,
-                isError = ViewModel.fechaError,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Text
-                )
-            )
+        val context = LocalContext.current
+        DateTextField(viewModel = ViewModel, context =context )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = ViewModel.idSuplidor,
@@ -251,7 +250,70 @@ fun RegistroGasto(
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@Composable
+fun DateTextField(
+    viewModel: gastosViewModel,
+    context: Context
+) {
+    val year: Int
+    val month: Int
+    val day: Int
+    val calendar = Calendar.getInstance()
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+    calendar.time = Date()
 
+    var isDatePickerVisible by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Fecha") },
+        singleLine = true,
+        maxLines = 1,
+        value = viewModel.fecha,
+        onValueChange = viewModel::onFechaChange,
+        leadingIcon = {
+            IconButton(
+                onClick = {
+                    keyboardController?.hide()
+                    isDatePickerVisible = true
+                }
+            ) {
+                Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Calendario")
+            }
+        },
+        isError = viewModel.fechaError,
+        readOnly = true
+    )
+
+    if (isDatePickerVisible) {
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(Date(year - 1900, month, dayOfMonth))
+                viewModel.fecha = formattedDate
+                isDatePickerVisible = false
+            },
+            year,
+            month,
+            day
+        )
+
+        DisposableEffect(Unit) {
+            datePickerDialog.show()
+            onDispose {
+                datePickerDialog.dismiss()
+            }
+        }
+
+        datePickerDialog.setOnCancelListener { isDatePickerVisible = false }
+        datePickerDialog.setOnDismissListener { isDatePickerVisible = false }
+    }
+}
 
 
 @Composable
